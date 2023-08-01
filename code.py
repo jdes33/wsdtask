@@ -1,25 +1,22 @@
 print("WSD")
 import heapq
-def most_basic_possible(queue, num_taps):
+def most_basic_possible(queue, num_taps): # switch to individual tap
 
     walk_time = 3 # time to walk to tap
     flow_rate = 100
-    for q_index in range(len(queue)):
-        queue[q_index] = queue[q_index] / flow_rate + walk_time
-
     print("initial q:", queue)
 
+    # assign first people to empty taps (intialise)
+    taps = [0] * num_taps
+    for i in range(num_taps):
+        # apply flow rate to compute time the person will be at this tap, and also add walk time
+        taps[i] = queue[i] / flow_rate + walk_time 
 
-    taps = queue[0: num_taps]
-    
     ## validation
-    ## MAKE SURE ALL VALUES IN QUEUE AND NUM_TAPS ARE NON ZERO
     if any(map(lambda x : x < 0, queue)):
         print(" ERROR MESSAGE INVALID BOTTLE VOLUMES")
     if num_taps < 1:
         print(" ERROR NO TAPS AVAILABLE")
-
-    #if 3 200's and they all go to zero then time is took is still same as if 1
 
     q_idx = num_taps
     current_time = 0
@@ -30,10 +27,12 @@ def most_basic_possible(queue, num_taps):
         for idx in range(len(taps)): # O(t)
             taps[idx] -= x
             if taps[idx] == 0:
-                taps[idx] = queue[q_idx]
+                # add next bottle
+                taps[idx] = queue[q_idx] / flow_rate + walk_time
+
                 q_idx += 1
 
-        current_time += x# + walk_time
+        current_time += x
         print("time:", current_time)
 
     # wait for last bottle
