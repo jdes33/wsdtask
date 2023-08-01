@@ -1,7 +1,15 @@
 print("WSD")
 import heapq
 def most_basic_possible(queue, num_taps):
+
+    walk_time = 3 # time to walk to tap
+    flow_rate = 100
+    for q_index in range(len(queue)):
+        queue[q_index] = queue[q_index] / flow_rate + walk_time
+
     print("initial q:", queue)
+
+
     taps = queue[0: num_taps]
     
     ## validation
@@ -17,7 +25,7 @@ def most_basic_possible(queue, num_taps):
     current_time = 0
     while q_idx < len(queue): # O(q)
         x = min(taps) # O(t) [could switch to O(logt) with heap]
-        
+        print("x: =", x)
         # subtract from all and add new bottle where zero
         for idx in range(len(taps)): # O(t)
             taps[idx] -= x
@@ -25,7 +33,7 @@ def most_basic_possible(queue, num_taps):
                 taps[idx] = queue[q_idx]
                 q_idx += 1
 
-        current_time += x 
+        current_time += x# + walk_time
         print("time:", current_time)
 
     # wait for last bottle
@@ -40,132 +48,21 @@ def most_basic_possible(queue, num_taps):
             
     return current_time
 
-
-        
-
-def really_bad(queue, num_taps):
-    print("queue", queue)
-    # case where one bottle in queue
-    if len(queue) == 1 and num_taps >= 0: return queue / 10
-
-    # state of taps (how much each person at the taps has left to fill)
-    taps = queue[0: num_taps]   # initialise taps remaining
-    print("taps initially:", taps)
-
-    sub = 0
-    current_time = 0
-
-    heapq.heapify(taps)
-
-    q_idx = num_taps
-    for i in range(num_taps, len(queue)):
-        print(f"i is {i}")
-
-        # BASED ON HOW U DO CURRENT TIME YOU NEEDA DO INNER LOOP OR SMTHN IN CASE ALL GO TO ZERO
-
-        # finish smallest
-        x = heapq.heappop(taps)
-        to_add = 0
-        for idx in range(len(taps)):
-            taps[idx] -= x
-            if taps[idx] == 0:
-                to_add += 1
-        current_time += x # update to show how long it took to finish smallest
-        print("finish smallest: ", taps)
-
-        heapq.heappush(taps, queue[i])
-        print("add next: ", taps)
-
-    print("total time: ", current_time)
-    return
-
-    print(current_time, taps)
-
-    while q_index < len(queue):
-
-        # finish smallest
-        m = min(taps)
-        # compute time
-        current_time += m - sub
-        # subtract m from all taps
-        sub += m
-
-        # add next to smallest
-        print(f"adding next: {queue[q_index]}")
-        taps[taps.index(m)] += queue[q_index]
-        
-        print(current_time, taps)
-        print("last queue index", q_index)
-        q_index += 1
-
-    # FINISHING SMALLEST
-    # finish smallest
-    m = min(taps)
-    # compute time
-    current_time += m - sub
-    # subtract m from all taps
-    sub += m
-
-    # wait for last person to finish filling bottle
-    current_time += max(taps) - sub
-    print(current_time, taps)
-        
-def bad_version(queue, num_taps):
-
-    taps = [] # state of taps (how much each person at the taps has left to fill)
-    q_index = 0
-
-    # initialise taps remaining
-    for _ in range(num_taps):
-        taps.append(queue[q_index])
-        q_index += 1
-    sub = 0
-    current_time = 0
-
-    print(current_time, taps)
-
-    while q_index < len(queue):
-
-        # finish smallest
-        m = min(taps)
-        # compute time
-        current_time += m - sub
-        # subtract m from all taps
-        sub += m
-
-        # add next to smallest
-        print(f"adding next: {queue[q_index]}")
-        taps[taps.index(m)] += queue[q_index]
-        
-        print(current_time, taps)
-        print("last queue index", q_index)
-        q_index += 1
-
-    # FINISHING SMALLEST
-    # finish smallest
-    m = min(taps)
-    # compute time
-    current_time += m - sub
-    # subtract m from all taps
-    sub += m
-
-    # wait for last person to finish filling bottle
-    current_time += max(taps) - sub
-    print(current_time, taps)
-        
-
-    
-
 q1 = [200, 300, 150, 200]
 q2 = [200, 300, 150, 200, 200, 300, 150, 200]
 q3 = [200, 200, 200, 100, 100, 100]
-q = [200, 200, 200, 100, 150, 100]
+q4 = [200, 200, 200, 100, 150, 100]
 
 
 #bad_version(q1, 2)
 #really_bad(q1,2)
-most_basic_possible(q1, 2)
-assert(most_basic_possible(q1, 2) == 500)
-assert(most_basic_possible(q2, 3) == 600)
-assert(most_basic_possible(q3, 3) == 300)
-assert(most_basic_possible(q4, 3) == 350)
+walk_time = 3
+flow_rate = 100
+print("TEST1: ")
+assert(most_basic_possible(q1, 2) == 500/flow_rate + 2 * walk_time)
+print("TEST2: ")
+assert(most_basic_possible(q2, 3) == 600/flow_rate + 3 * walk_time)
+print("TEST3: ")
+assert(most_basic_possible(q3, 3) == 300/flow_rate + 2 * walk_time)
+print("TEST4: ")
+assert(most_basic_possible(q4, 3) == 350/flow_rate + 2 * walk_time)
