@@ -1,22 +1,24 @@
 print("WSD")
 import heapq
-def most_basic_possible(queue, num_taps): # switch to individual tap
+def most_basic_possible(queue, flow_rates): # switch to individual tap
 
+    num_taps = len(flow_rates)
     walk_time = 3 # time to walk to tap
-    flow_rate = 100
     print("initial q:", queue)
 
     # assign first people to empty taps (intialise)
     taps = [0] * num_taps
     for i in range(num_taps):
         # apply flow rate to compute time the person will be at this tap, and also add walk time
-        taps[i] = queue[i] / flow_rate + walk_time 
+        taps[i] = queue[i] / flow_rates[i] + walk_time 
 
     ## validation
     if any(map(lambda x : x < 0, queue)):
         print(" ERROR MESSAGE INVALID BOTTLE VOLUMES")
     if num_taps < 1:
         print(" ERROR NO TAPS AVAILABLE")
+    if any(map(lambda x : x < 0, flow_rates)):
+        print(" ERROR MESSAGE INVALID FLOW RATE/S")
 
     q_idx = num_taps
     current_time = 0
@@ -28,7 +30,7 @@ def most_basic_possible(queue, num_taps): # switch to individual tap
             taps[idx] -= x
             if taps[idx] == 0:
                 # add next bottle
-                taps[idx] = queue[q_idx] / flow_rate + walk_time
+                taps[idx] = queue[q_idx] / flow_rates[idx] + walk_time
 
                 q_idx += 1
 
@@ -58,10 +60,10 @@ q4 = [200, 200, 200, 100, 150, 100]
 walk_time = 3
 flow_rate = 100
 print("TEST1: ")
-assert(most_basic_possible(q1, 2) == 500/flow_rate + 2 * walk_time)
+assert(most_basic_possible(q1, [100] * 2) == 500/flow_rate + 2 * walk_time)
 print("TEST2: ")
-assert(most_basic_possible(q2, 3) == 600/flow_rate + 3 * walk_time)
+assert(most_basic_possible(q2, [100] * 3) == 600/flow_rate + 3 * walk_time)
 print("TEST3: ")
-assert(most_basic_possible(q3, 3) == 300/flow_rate + 2 * walk_time)
+assert(most_basic_possible(q3, [100] * 3) == 300/flow_rate + 2 * walk_time)
 print("TEST4: ")
-assert(most_basic_possible(q4, 3) == 350/flow_rate + 2 * walk_time)
+assert(most_basic_possible(q4, [100] * 3) == 350/flow_rate + 2 * walk_time)
