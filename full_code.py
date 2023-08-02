@@ -198,9 +198,11 @@ assert (compute_fill_time_basic(q1, 2) == 500 / basic_flow_rate)
 assert (compute_fill_time_basic(q2, 3) == 600 / basic_flow_rate)
 assert (compute_fill_time_basic(q3, 3) == 300 / basic_flow_rate)
 assert (compute_fill_time_basic(q4, 3) == 350 / basic_flow_rate)
-# assert(compute_fill_time_basic([], 0) == 0) # no taps raises error as expected
+#compute_fill_time_basic([], 1.5) # non int value for taps raises (inbuilt) type error as expected
+#compute_fill_time_basic([], 0) # no taps raises error as expected
 assert(compute_fill_time_basic([], 4) == 0) # empty queue
 assert(compute_fill_time_basic([40], 4) == 0.4) # num people < num taps
+
 
 print("Running tests on walk time function")
 walk_time = 3
