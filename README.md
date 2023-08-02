@@ -7,10 +7,10 @@ The other file smallest_possible_time_recursive.py is another version that explo
 For example:
 Using queue = [100, 60, 200, 30, 20, 40, 60] and 2 taps with flow rates = [10, 20] will generate the following 6 possible plans.
 Where the shortest one took 27 seconds. (Since a person next in queue could pick from multiple different taps if more than one is free, and since they have differnt flow rates the tap they chose could impact the overall time for everyone in the queue to fill their bottles).
-########
-\%\%\%\PLAN: 
-Add (initial bottle): 100ml to tap 0, that'll take 13.0s.
-Add (initial bottle): 60ml to tap 1, that'll take 6.0s.
+########  
+\%\%\%\PLAN:   
+Add (initial bottle): 100ml to tap 0, that'll take 13.0s.  
+Add (initial bottle): 60ml to tap 1, that'll take 6.0s.  
 Finished 6.0s from taps=[1], [t=6.0s]
 Add bottle 200ml to tap 1 that'll take 13.0s.
 Finished 7.0s from taps=[0], [t=13.0s]
