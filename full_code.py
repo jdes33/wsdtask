@@ -8,7 +8,7 @@ def compute_fill_time_basic(queue, num_taps):
     """Computes the time needed for queue of water bottles to be filled by taps (flowing at 100ml/s)
 
     Args:
-        queue (float): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
+        queue (int): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
         num_taps (int): Number of taps at festival
 
     Returns:
@@ -54,7 +54,7 @@ def compute_fill_time_with_walk(queue, num_taps, walk_time=3):
     """Computes the time needed for queue of water bottles to be filled by taps (flowing at 100ml/s).
 
     Args:
-        queue (float): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
+        queue (int): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
         num_taps (int): Number of taps at festival
         walk_time (float): Time taken for any person in queue to walk to tap in seconds (default is 3)
 
@@ -103,7 +103,7 @@ def compute_fill_time_different_flows(queue, flow_rates, walk_time=3):
     """Computes the time needed for queue of water bottles to be filled by taps
 
     Args:
-        queue (float): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
+        queue (int): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
         flow_rates (float): The flow rate corresponding to each tap in ml/s
         walk_time (float): Time taken for any person in queue to walk to tap in seconds (default is 3)
 
