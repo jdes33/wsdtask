@@ -15,7 +15,7 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
     Returns:
         float:  Amount of time in seconds needed for all bottles to be filled
     """
-
+    if len(queue) == 0: return 0
     num_taps = len(flow_rates)
 
     # validation
@@ -39,7 +39,7 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
             desc = ""
             for i in range(min(num_taps, len(queue))):
                 taps[i] = perm[i] / flow_rates[i] + walk_time
-                desc += f"\nAdd (initial bottle): {perm[i]} to tap {i}, that'll take {taps[i]}s."
+                desc += f"\nAdd (initial bottle): {perm[i]}ml to tap {i}, that'll take {taps[i]}s."
 
             t = compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time, taps, q_idx=min(num_taps, len(queue)), description=desc)
             if smallestPerm is None or t < smallestPerm:
@@ -47,9 +47,10 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
         print(f"########################## SHORTEST PLAN FOUND = {smallestPerm} seconds")
         return smallestPerm # DONE!
     elif not taps and num_taps == 1:
-        # no need to recurse as only one option
-        # SHOULD SETUP STUFF HERE THO
-        pass
+        print("ONE tap so only one plan possible:")
+        taps = [queue[0] / flow_rates[0] + walk_time] # only one tap so no options/recursion needed here
+        description += f"\nAdd (initial bottle): {queue[0]}ml to tap 0, that'll take {taps[0]}s."
+        q_idx += 1
 
     while q_idx < len(queue):
         smallest = min(taps)
@@ -62,12 +63,12 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
                 free_idxs.append(idx)
 
         current_time+=smallest  # only upate time here as we have finished an event/bottle filling task (1 or more bottles filled)
-        description += f"\nFinished {smallest} from {free_idxs}, [t={current_time}]"
+        description += f"\nFinished {smallest}s from taps={free_idxs}, [t={current_time}s]"
 
         if len(free_idxs) == 1:
             # add new bottle where index zero and increment to next in queue
             taps[free_idxs[0]] = queue[q_idx] / flow_rates[free_idxs[0]] + walk_time
-            description += f"\nAdd bottle {queue[q_idx]} to tap {free_idxs[0]} that'll take {taps[free_idxs[0]]} s."
+            description += f"\nAdd bottle {queue[q_idx]}ml to tap {free_idxs[0]} that'll take {taps[free_idxs[0]]}s."
             q_idx += 1
         else:
             smallestPerm = None
@@ -79,27 +80,29 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
                   
             saved_taps = taps[:]
             new_taps = taps[:]
-
+            smallest_desc = ""
             for tperm in tap_permutations:
                 desc = description
                 taps = saved_taps[:]
                 # compute taps
                 for i in range(num_bottles_to_extract):
                     taps[tperm[i]] = queue[q_idx + i] / flow_rates[tperm[i]] + walk_time
-                    #print("add bottle: ", queue[q_idx + i], " to tap ", tperm[i], " that'll take ", taps[tperm[i]], "s")
-                    desc += f"\nAdd bottle {queue[q_idx + i]} to tap {tperm[i]}, that'll take {taps[tperm[i]]}s"
+                    desc += f"\nAdd bottle {queue[q_idx + i]}ml to tap {tperm[i]}, that'll take {taps[tperm[i]]}s"
 
                 t = compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time, taps, q_idx+num_bottles_to_extract, current_time=current_time, description=desc) # we can't acc go past end of queue i think so dw
                 if smallestPerm is None or t < smallestPerm:
                     smallestPerm = t
                     new_taps = taps[:]
+                    smallest_desc = desc
 
+            # carry forwards best description
+            description = smallest_desc
             taps = new_taps[:]
             q_idx+=num_bottles_to_extract
 
     # wait for last bottle
     current_time+=max(taps)
-    description += f"\nFinished last bottle of {max(taps)} [t={current_time}]"
+    description += f"\nFinished last bottle of {max(taps)}s [t={current_time}]"
     print("########")
     print(f"\%\%\%\PLAN: {description}\n TOTAL TIME:{current_time}")
     print("########")
@@ -107,6 +110,10 @@ def compute_smallest_fill_time_different_flows(queue, flow_rates, walk_time=3, t
 
 
 
-print("\n\n\n")
-print("###################################")
-print("##### RETURN VALUE= ", compute_smallest_fill_time_different_flows(queue=[100, 60, 200, 30, 20, 40, 60], flow_rates=[10, 20], walk_time=3), " SECONDS")
+print("\n")
+print("########### test case 1 ############")
+assert(compute_smallest_fill_time_different_flows(queue=[100, 60, 200, 30, 20, 40, 60], flow_rates=[10, 20], walk_time=3) == 27)
+print("########### test case 2 ###########")
+assert(compute_smallest_fill_time_different_flows(queue=[100,50], flow_rates=[10], walk_time=3) == 21)
+print("########### test case 3 #############")
+assert(compute_smallest_fill_time_different_flows(queue=[100,60, 30], flow_rates=[10, 20], walk_time=3) == 12.5)
