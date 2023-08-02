@@ -14,12 +14,12 @@ def compute_fill_time_basic(queue, num_taps):
     Returns:
         float:  Amount of time in seconds needed for all bottles to be filled
     """
-
+    
     flow_rate = 100
-    # assign first people to empty taps (intialise)
+    # assign first bottles to empty taps (intialise)
     # list holding current state of taps (time remaining in seconds)
     taps = [0] * num_taps
-    for i in range(num_taps):
+    for i in range(min(num_taps, len(queue))):
         taps[i] = queue[i] / flow_rate
 
     # validation
@@ -63,10 +63,10 @@ def compute_fill_time_with_walk(queue, num_taps, walk_time=3):
     """
 
     flow_rate = 100
-    # assign first people to empty taps and add walk time (intialise)
+    # assign first bottles to empty taps and add walk time (intialise)
     # list holding current state of taps (time remaining in seconds)
     taps = [0] * num_taps
-    for i in range(num_taps):
+    for i in range(min(num_taps, len(queue))):
         taps[i] = queue[i] / flow_rate + walk_time
 
     # validation
@@ -95,7 +95,7 @@ def compute_fill_time_with_walk(queue, num_taps, walk_time=3):
     return current_time + max(taps)
 
 ################################################################
-# Function for bonus task: different flow rates (bonus task 3) [changed param, added exception, changed line 119 and 140]
+# Function for bonus task: different flow rates (bonus task 3) [changed param, added exception, changed line 119 and 139]
 ################################################################
 
 
@@ -112,10 +112,9 @@ def compute_fill_time_different_flows(queue, flow_rates, walk_time=3):
     """
 
     num_taps = len(flow_rates)
-    # assign first people to empty taps accounting for flow rate and walk time (intialise)
+    # assign first bottles to empty taps accounting for flow rate and walk time (intialise)
     taps = [0] * num_taps
-    for i in range(num_taps):
-        # time = volume of bottle / rate of tap
+    for i in range(min(num_taps, len(queue))):
         taps[i] = queue[i] / flow_rates[i] + walk_time
 
     # validation
@@ -199,6 +198,9 @@ assert (compute_fill_time_basic(q1, 2) == 500 / basic_flow_rate)
 assert (compute_fill_time_basic(q2, 3) == 600 / basic_flow_rate)
 assert (compute_fill_time_basic(q3, 3) == 300 / basic_flow_rate)
 assert (compute_fill_time_basic(q4, 3) == 350 / basic_flow_rate)
+# assert(compute_fill_time_basic([], 0) == 0) # no taps raises error as expected
+assert(compute_fill_time_basic([], 4) == 0) # empty queue
+assert(compute_fill_time_basic([40], 4) == 0.4) # num people < num taps
 
 print("Running tests on walk time function")
 walk_time = 3
@@ -210,6 +212,9 @@ assert (compute_fill_time_with_walk(q3, 3, walk_time)
         == 300 / basic_flow_rate + 2 * walk_time)
 assert (compute_fill_time_with_walk(q4, 3, walk_time)
         == 350 / basic_flow_rate + 2 * walk_time)
+#assert(compute_fill_time_with_walk([], 0) == 0) # no taps raises error as expected
+assert(compute_fill_time_with_walk([], 4, walk_time=5) == 0) # empty queue
+assert(compute_fill_time_with_walk([40], 4, walk_time=5) == 0.4 + 5) # num people < num taps
 
 print("Running tests on varying flow rates function")
 
@@ -231,3 +236,7 @@ assert (compute_fill_time_different_flows(
 # t1 takes 13s, t2 takes 53s, so t1 gets 8k and takes 83s which is 96 total so far so t2 gets 10k this time which takes 503 seconds totalling 556s
 assert (compute_fill_time_different_flows(
     queue=[1000, 1000, 8000, 10000], flow_rates=[100, 20]) == 556)
+
+#assert(compute_fill_time_with_walk([], 0) == 0) # no taps raises error as expected
+assert(compute_fill_time_different_flows(queue=[], flow_rates=[10, 20, 50]) == 0)# no people in queue
+assert(compute_fill_time_different_flows(queue=[100, 60], flow_rates=[10, 20, 50]) == 13)# len(queue) < num_taps
