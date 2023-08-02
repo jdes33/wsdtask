@@ -95,7 +95,7 @@ def compute_fill_time_with_walk(queue, num_taps, walk_time=3):
     return current_time + max(taps)
 
 ################################################################
-# Function for bonus task: different flow rates (bonus task 3) [changed param, added exception, changed line 119 and 139]
+# Function for bonus task: different flow rates (bonus task 3) [changed param, added exception, changed line 118 and 139]
 ################################################################
 
 
