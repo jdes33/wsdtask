@@ -75,3 +75,11 @@ print("\npart 4 before:")
 most_basic_possible([100,10,1000], [100,5]) #t1 takes 1s (+3 for walk), t2 takes 2 seconds (+3 for walk), so t1 gets big task => result 4s+ 13s = 17
 print("\npart 4 after:")
 most_basic_possible([100,10,1000], [100,20]) # t1 takes 1s (+3 for walk), t2 takes half a second (+3 for walk), so t2 gets big task => 3.5s + 53s = 56.5s
+
+# THIS EXAMPLE USES 1000ML FOR FIRST TWO TASKS, SO EVEN IF SWITCHED AROUND WOULDNT CHANGE OUTCOME
+# the 3s in the calculations are for walking times. (You can scale down all the numbers if you scale down walking time too)
+print("\npart 5 better example before:")
+most_basic_possible([1000, 1000, 8000, 10000], [100,10]) # t1 takes 13s, t2 takes 103s, so t1 gets 8k and takes 83s which is 96s total so far so it then gets 10k which takes 103s totalling 199s
+
+print("\npart 5 better example after:")
+most_basic_possible([1000, 1000, 8000, 10000], [100,20]) # t1 takes 13s, t2 takes 53s, so t1 gets 8k and takes 83s which is 96 total so far so t2 gets 10k this time which takes 503 seconds totalling 556s 
