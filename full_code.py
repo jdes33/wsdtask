@@ -56,7 +56,7 @@ def compute_fill_time_with_walk(queue, num_taps, walk_time=3):
     Args:
         queue (float): The volumes in ml of each bottle in the queue, index 0 represents first bottle in queue
         num_taps (int): Number of taps at festival
-        walk_time (float): Amount of time in seconds for any person from queue to walk to tap
+        walk_time (float): Time taken for any person in queue to walk to tap in seconds (default is 3)
 
     Returns:
         float:  Amount of time in seconds needed for all bottles to be filled
