@@ -67,3 +67,11 @@ print("TEST3: ")
 assert(most_basic_possible(q3, [100] * 3) == 300/flow_rate + 2 * walk_time)
 print("TEST4: ")
 assert(most_basic_possible(q4, [100] * 3) == 350/flow_rate + 2 * walk_time)
+print("TEST5: vary rate")
+assert(most_basic_possible(q1, [50, 150]) == 200/50 + 200/50 + 2 * walk_time)
+
+
+print("\npart 4 before:")
+most_basic_possible([100,10,1000], [100,5]) #t1 takes 1s (+3 for walk), t2 takes 2 seconds (+3 for walk), so t1 gets big task => result 4s+ 13s = 17
+print("\npart 4 after:")
+most_basic_possible([100,10,1000], [100,20]) # t1 takes 1s (+3 for walk), t2 takes half a second (+3 for walk), so t2 gets big task => 3.5s + 53s = 56.5s
